@@ -1,0 +1,6 @@
+{
+  "appTitle": "Tic Tac Toe",
+  "playerX": "Player X",
+  "playerO": "Player O",
+  "draw": "Draw"
+}

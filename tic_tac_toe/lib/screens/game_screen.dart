@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tic_tac_toe/l10n/app_localizations.dart';
 import 'package:tic_tac_toe/theme/app_theme.dart';
 import 'package:lottie/lottie.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -7,11 +8,13 @@ import 'package:flutter_animate/flutter_animate.dart';
 class GameScreen extends StatefulWidget {
   final bool isDarkMode;
   final VoidCallback onToggle;
+  final VoidCallback onToggleLanguage;
 
   const GameScreen({
     super.key,
     required this.isDarkMode,
     required this.onToggle,
+    required this.onToggleLanguage,
   });
 
   @override
@@ -178,6 +181,8 @@ class _GameScreenState extends State<GameScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final loc = AppLocalizations.of(context)!;
+
     return Container(
       decoration: BoxDecoration(
         gradient: widget.isDarkMode
@@ -193,78 +198,67 @@ class _GameScreenState extends State<GameScreen> {
                 colors: [Color(0xFFA366FF), Color(0xFF5E42F5)],
               ),
       ),
-        child: Scaffold(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title: Text(loc.appTitle),
           backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            title: const Text('Tic Tac Toe'),
-            backgroundColor: Colors.transparent,
 
-            actions: [
-              _buildIconButton(
-                _undoLastMove,
-                Icon(Icons.restart_alt),
-                theme.colorScheme.surface,
+          actions: [
+            _buildIconButton(
+              _undoLastMove,
+              Icon(Icons.restart_alt),
+              theme.colorScheme.surface,
+            ),
+
+            SizedBox(width: 5),
+
+            _buildIconButton(
+              _clearBoard,
+              Icon(Icons.clear),
+              theme.colorScheme.surface,
+            ),
+
+            SizedBox(width: 5),
+            
+            _buildIconButton(
+              widget.onToggleLanguage,
+              Icon(Icons.translate_outlined),
+              theme.colorScheme.surface,
+            ),
+
+            SizedBox(width: 5),
+
+            _buildIconButton(
+              widget.onToggle,
+              Icon(
+                widget.isDarkMode
+                    ? Icons.dark_mode_outlined
+                    : Icons.light_mode_outlined,
               ),
-
-              SizedBox(width: 5),
-
-              _buildIconButton(
-                _clearBoard,
-                Icon(Icons.clear),
-                theme.colorScheme.surface,
-              ),
-
-              SizedBox(width: 5),
-
-              Container(
-                width: 45 ,
-                height: 45,
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surface,
-                  border: Border.all(
-                    color: theme.colorScheme.surface,
-                    width: 1.5,
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.translate_outlined),
-                ),
-              ),
-
-              SizedBox(width: 5),
-
-              _buildIconButton(
-                widget.onToggle,
-                Icon(
-                  widget.isDarkMode
-                      ? Icons.dark_mode_outlined
-                      : Icons.light_mode_outlined,
-                ),
-                theme.colorScheme.surface,
-              ),
-              SizedBox(width: 10),
-
-            ],
-          ),
-          body: SafeArea(
-            child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+              theme.colorScheme.surface,
+            ),
+            SizedBox(width: 10),
+          ],
+        ),
+        body: SafeArea(
+          child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
               double screenWidth = constraints.maxWidth;
-             double screenHeight = constraints.maxHeight;
-            
-             bool device = screenWidth > 600;
-            
-              return  SingleChildScrollView(
+              double screenHeight = constraints.maxHeight;
+
+              bool device = screenWidth > 600;
+
+              return SingleChildScrollView(
                 child: Padding(
-                padding: const EdgeInsets.all(15),
+                  padding: const EdgeInsets.all(15),
                   child: Center(
                     child: Column(
                       spacing: 20,
                       mainAxisAlignment: .spaceAround,
                       children: [
                         Container(
-                          width: screenWidth ,
+                          width: screenWidth,
                           height: device ? screenHeight / 3 : screenHeight / 7,
                           decoration: BoxDecoration(
                             color: theme.colorScheme.surface,
@@ -279,29 +273,29 @@ class _GameScreenState extends State<GameScreen> {
                             children: [
                               _buildScoresBoard(
                                 scoresOfX.toString(),
-                                "Player X",
+                                loc.playerX,
                                 theme.colorScheme.primary,
                                 theme.colorScheme.onSurface,
-                                device
+                                device,
                               ),
                               _buildScoresBoard(
                                 scoresOfDraw.toString(),
-                                "Draw",
+                                loc.draw,
                                 theme.colorScheme.onSurface,
                                 theme.colorScheme.onSurface,
-                                device
+                                device,
                               ),
                               _buildScoresBoard(
                                 scoresOfO.toString(),
-                                "Player O",
+                                loc.playerO,
                                 theme.colorScheme.secondary,
                                 theme.colorScheme.onSurface,
-                                device
+                                device,
                               ),
                             ],
                           ),
                         ),
-                  
+
                         Row(
                           mainAxisAlignment: .spaceAround,
                           children: [
@@ -314,9 +308,8 @@ class _GameScreenState extends State<GameScreen> {
                               !turn
                                   ? [
                                       BoxShadow(
-                                        color: theme.colorScheme.primary.withValues(
-                                          alpha: 0.4,
-                                        ),
+                                        color: theme.colorScheme.primary
+                                            .withValues(alpha: 0.4),
                                         blurRadius: 15,
                                         spreadRadius: 2,
                                       ),
@@ -324,10 +317,10 @@ class _GameScreenState extends State<GameScreen> {
                                   : [],
                               "X",
                               theme.colorScheme.primary,
-                              "Player X",
+                              loc.playerX,
                               theme.colorScheme.primary.withValues(alpha: 0.8),
                               screenWidth,
-                              screenHeight, 
+                              screenHeight,
                               device,
                             ),
                             _buildPlayerCard(
@@ -339,9 +332,8 @@ class _GameScreenState extends State<GameScreen> {
                               turn
                                   ? [
                                       BoxShadow(
-                                        color: theme.colorScheme.secondary.withValues(
-                                          alpha: 0.4,
-                                        ),
+                                        color: theme.colorScheme.secondary
+                                            .withValues(alpha: 0.4),
                                         blurRadius: 15,
                                         spreadRadius: 2,
                                       ),
@@ -349,7 +341,7 @@ class _GameScreenState extends State<GameScreen> {
                                   : [],
                               "O",
                               theme.colorScheme.secondary,
-                              "Player O",
+                              loc.playerO,
                               theme.colorScheme.secondary,
                               screenWidth,
                               screenHeight,
@@ -357,87 +349,90 @@ class _GameScreenState extends State<GameScreen> {
                             ),
                           ],
                         ),
-                            GridView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: 9,
-                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
-                                  crossAxisSpacing: 5,
-                                  mainAxisSpacing: 5,
-                                  childAspectRatio: device ? 3 : 1
-                                ),
-                                itemBuilder: (BuildContext context, int index) {
-                                  final isWin = winLocation.contains(index);
-                                  return GestureDetector(
-                                    onTap: () {
-                                      _tapped(index);
-                                    },
-                                    child:
-                                        Container(
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                  color: isWin
-                                                      ? AppTheme.winColor
-                                                      : theme.colorScheme.surface,
-                                                  width: isWin ? 4 : 3,
-                                                ),
-                                                borderRadius: BorderRadius.circular(20),
-                                                color: theme.colorScheme.surface,
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  xo[index],
-                                                  style: TextStyle(
-                                                    fontSize: device ? 50 : 80,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: isWin
-                                                        ? AppTheme.winColor
-                                                        : (xo[index] == 'X'
+                        GridView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: 9,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                crossAxisSpacing: 5,
+                                mainAxisSpacing: 5,
+                                childAspectRatio: device ? 3 : 1,
+                              ),
+                          itemBuilder: (BuildContext context, int index) {
+                            final isWin = winLocation.contains(index);
+                            return GestureDetector(
+                              onTap: () {
+                                _tapped(index);
+                              },
+                              child:
+                                  Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: isWin
+                                                ? AppTheme.winColor
+                                                : theme.colorScheme.surface,
+                                            width: isWin ? 4 : 3,
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                            20,
+                                          ),
+                                          color: theme.colorScheme.surface,
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            xo[index],
+                                            style: TextStyle(
+                                              fontSize: device ? 50 : 80,
+                                              fontWeight: FontWeight.bold,
+                                              color: isWin
+                                                  ? AppTheme.winColor
+                                                  : (xo[index] == 'X'
+                                                        ? theme
+                                                              .colorScheme
+                                                              .primary
+                                                        : theme
+                                                              .colorScheme
+                                                              .secondary),
+                                              shadows: [
+                                                Shadow(
+                                                  blurRadius: 10,
+                                                  color:
+                                                      (xo[index] == 'X'
                                                               ? theme
                                                                     .colorScheme
                                                                     .primary
                                                               : theme
                                                                     .colorScheme
-                                                                    .secondary),
-                                                    shadows: [
-                                                      Shadow(
-                                                        blurRadius: 10,
-                                                        color:
-                                                            (xo[index] == 'X'
-                                                                    ? theme
-                                                                          .colorScheme
-                                                                          .primary
-                                                                    : theme
-                                                                          .colorScheme
-                                                                          .secondary)
-                                                                .withValues(alpha: 0.5),
-                                                      ),
-                                                    ],
-                                                  ),
+                                                                    .secondary)
+                                                          .withValues(
+                                                            alpha: 0.5,
+                                                          ),
                                                 ),
-                                              ),
-                                            )
-                                            .animate(key: ValueKey(xo[index]))
-                                            .flip(
-                                              direction: Axis.horizontal,
-                                              duration: 400.ms,
-                                              curve: Curves.easeInOut,
-                                            )
-                                            .fadeIn(),
-                                  );
-                                },
-                              ),
-                          
-                        
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                      .animate(key: ValueKey(xo[index]))
+                                      .flip(
+                                        direction: Axis.horizontal,
+                                        duration: 400.ms,
+                                        curve: Curves.easeInOut,
+                                      )
+                                      .fadeIn(),
+                            );
+                          },
+                        ),
                       ],
                     ),
                   ),
-                  ),
+                ),
               );
-            }
-            ),
+            },
           ),
+        ),
       ),
     );
   }
@@ -470,8 +465,18 @@ Widget _buildScoresBoard(
 ) {
   return Column(
     children: [
-      Text(score, style: TextStyle(color: scoreColor, fontWeight: .bold, fontSize: device ? 42 : 40)),
-      Text(player, style: TextStyle(color: statusColor, fontSize: device ? 30 : 24)),
+      Text(
+        score,
+        style: TextStyle(
+          color: scoreColor,
+          fontWeight: .bold,
+          fontSize: device ? 42 : 40,
+        ),
+      ),
+      Text(
+        player,
+        style: TextStyle(color: statusColor, fontSize: device ? 28 : 24),
+      ),
     ],
   );
 }
@@ -501,8 +506,18 @@ Widget _buildPlayerCard(
     ),
     child: Column(
       children: [
-        Text(playerTurn, style: TextStyle(color: turnColor, fontWeight: .bold, fontSize: device ? 42 : 42)),
-        Text(player, style: TextStyle(color: playerColor, fontSize: device ? 28 : 36)),
+        Text(
+          playerTurn,
+          style: TextStyle(
+            color: turnColor,
+            fontWeight: .bold,
+            fontSize: device ? 42 : 42,
+          ),
+        ),
+        Text(
+          player,
+          style: TextStyle(color: playerColor, fontSize: device ? 26 : 34),
+        ),
       ],
     ),
   );

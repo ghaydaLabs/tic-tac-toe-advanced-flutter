@@ -12,6 +12,9 @@ dependencies:
   lottie: ^3.3.2
   audioplayers: ^6.5.1
   flutter_animate: ^4.5.2
+  flutter_localizations:
+    sdk: flutter
+  intl: any
 
 dev_dependencies:
   flutter_test:
@@ -20,6 +23,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
 
   assets:
    - assets/animation/

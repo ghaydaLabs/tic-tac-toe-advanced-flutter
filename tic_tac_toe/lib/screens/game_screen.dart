@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tic_tac_toe/theme/app_theme.dart';
 import 'package:lottie/lottie.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class GameScreen extends StatefulWidget {
   final bool isDarkMode;
@@ -102,7 +103,7 @@ class _GameScreenState extends State<GameScreen> {
 
   void _showDialog(String winner) {
     final player = AudioPlayer();
-  player.play(AssetSource('audio/win_sound.mp3'));
+    player.play(AssetSource('audio/win_sound.mp3'));
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -110,43 +111,49 @@ class _GameScreenState extends State<GameScreen> {
         return Stack(
           children: [
             Lottie.asset('assets/animation/celebrate.json'),
-           AlertDialog(
-            title: Column(
-              children: [
-                Text(
-                  "CONGRATS!",
-                  style: TextStyle(color: Colors.grey[700], fontSize: 16, letterSpacing: 2),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  "Winner is: $winner",
-                  style: const TextStyle(
-                    color: Colors.amberAccent, 
-                    fontSize: 30, 
-                    fontWeight: FontWeight.bold
+            AlertDialog(
+              title: Column(
+                children: [
+                  Text(
+                    "CONGRATS!",
+                    style: TextStyle(
+                      color: Colors.grey[700],
+                      fontSize: 16,
+                      letterSpacing: 2,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    "Winner is: $winner",
+                    style: const TextStyle(
+                      color: Colors.amberAccent,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              actionsAlignment: .center,
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    player.stop();
+                    _clearBoard();
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    "Play Again",
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
               ],
+              backgroundColor: Colors.white,
+
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
             ),
-            actionsAlignment: .center,
-            actions: [
-              TextButton(onPressed: (){
-                player.stop();
-                _clearBoard();
-              Navigator.of(context).pop();
-              }, child: Text("Play Again", style: TextStyle(color: Colors.black),)),
-              
-            ],
-            backgroundColor: 
-            Colors.white,
-
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-
-
-          ),
-          ]
+          ],
         );
       },
     );
@@ -195,43 +202,19 @@ class _GameScreenState extends State<GameScreen> {
             backgroundColor: Colors.transparent,
 
             actions: [
-              Container(
-                width: 45,
-                height: 45,
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surface,
-                  border: Border.all(
-                    color: theme.colorScheme.surface,
-                    width: 2.5,
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: IconButton(
-                  onPressed: () {
-                    _undoLastMove();
-                  },
-                  icon: Icon(Icons.restart_alt),
-                ),
+              _buildIconButton(
+                _undoLastMove,
+                Icon(Icons.restart_alt),
+                theme.colorScheme.surface,
               ),
+
               SizedBox(width: 5),
-              Container(
-                width: 45,
-                height: 45,
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surface,
-                  border: Border.all(
-                    color: theme.colorScheme.surface,
-                    width: 1.5,
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: IconButton(
-                  onPressed: () {
-                    _clearBoard();
-                  },
-                  icon: Icon(Icons.clear),
-                ),
+              _buildIconButton(
+                _clearBoard,
+                Icon(Icons.clear),
+                theme.colorScheme.surface,
               ),
+
               SizedBox(width: 5),
 
               Container(
@@ -251,26 +234,14 @@ class _GameScreenState extends State<GameScreen> {
                 ),
               ),
               SizedBox(width: 5),
-
-              Container(
-                width: 45,
-                height: 45,
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surface,
-                  border: Border.all(
-                    color: theme.colorScheme.surface,
-                    width: 1.5,
-                  ),
-                  borderRadius: BorderRadius.circular(12),
+              _buildIconButton(
+                widget.onToggle,
+                Icon(
+                  widget.isDarkMode
+                      ? Icons.dark_mode_outlined
+                      : Icons.light_mode_outlined,
                 ),
-                child: IconButton(
-                  onPressed: widget.onToggle,
-                  icon: Icon(
-                    widget.isDarkMode
-                        ? Icons.dark_mode_outlined
-                        : Icons.light_mode_outlined,
-                  ),
-                ),
+                theme.colorScheme.surface,
               ),
             ],
           ),
@@ -294,53 +265,23 @@ class _GameScreenState extends State<GameScreen> {
                     child: Row(
                       mainAxisAlignment: .spaceAround,
                       children: [
-                        Column(
-                          children: [
-                            Text(
-                              scoresOfX.toString(),
-                              style: TextStyle(
-                                color: theme.colorScheme.primary,
-                              ),
-                            ),
-                            Text(
-                              "Player X",
-                              style: TextStyle(
-                                color: theme.colorScheme.onSurface,
-                              ),
-                            ),
-                          ],
+                        _buildScoresBoard(
+                          scoresOfX.toString(),
+                          "Player X",
+                          theme.colorScheme.primary,
+                          theme.colorScheme.onSurface,
                         ),
-                        Column(
-                          children: [
-                            Text(
-                              scoresOfDraw.toString(),
-                              style: TextStyle(
-                                color: theme.colorScheme.onSurface,
-                              ),
-                            ),
-                            Text(
-                              "Draw",
-                              style: TextStyle(
-                                color: theme.colorScheme.onSurface,
-                              ),
-                            ),
-                          ],
+                        _buildScoresBoard(
+                          scoresOfDraw.toString(),
+                          "Draw",
+                          theme.colorScheme.onSurface,
+                          theme.colorScheme.onSurface,
                         ),
-                        Column(
-                          children: [
-                            Text(
-                              scoresOfO.toString(),
-                              style: TextStyle(
-                                color: theme.colorScheme.secondary,
-                              ),
-                            ),
-                            Text(
-                              "Player O",
-                              style: TextStyle(
-                                color: theme.colorScheme.onSurface,
-                              ),
-                            ),
-                          ],
+                        _buildScoresBoard(
+                          scoresOfO.toString(),
+                          "Player O",
+                          theme.colorScheme.secondary,
+                          theme.colorScheme.onSurface,
                         ),
                       ],
                     ),
@@ -349,162 +290,136 @@ class _GameScreenState extends State<GameScreen> {
                   Row(
                     mainAxisAlignment: .spaceAround,
                     children: [
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        width: 160,
-                        height: 110,
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.surface,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: !turn
-                                ? theme.colorScheme.primary
-                                : theme.colorScheme.surface,
-                            width: !turn ? 4 : 2,
-                          ),
-                          boxShadow: !turn
-                              ? [
-                                  BoxShadow(
-                                    color: theme.colorScheme.primary.withValues(
-                                      alpha: 0.4,
-                                    ),
-                                    blurRadius: 15,
-                                    spreadRadius: 2,
+                      _buildPlayerCard(
+                        theme.colorScheme.surface,
+                        !turn
+                            ? theme.colorScheme.primary
+                            : theme.colorScheme.surface,
+                        !turn ? 4 : 2,
+                        !turn
+                            ? [
+                                BoxShadow(
+                                  color: theme.colorScheme.primary.withValues(
+                                    alpha: 0.4,
                                   ),
-                                ]
-                              : [],
-                        ),
-                        child: Column(
-                          children: [
-                            Text(
-                              "X",
-                              style: TextStyle(
-                                color: theme.colorScheme.primary,
-                              ),
-                            ),
-                            Text(
-                              "Player X",
-                              style: TextStyle(
-                                color: theme.colorScheme.primary.withValues(
-                                  alpha: 0.8,
+                                  blurRadius: 15,
+                                  spreadRadius: 2,
                                 ),
-                              ),
-                            ),
-                          ],
-                        ),
+                              ]
+                            : [],
+                        "X",
+                        theme.colorScheme.primary,
+                        "Player X",
+                        theme.colorScheme.primary.withValues(alpha: 0.8),
                       ),
-
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        width: 160,
-                        height: 110,
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.surface,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: turn
-                                ? theme.colorScheme.secondary
-                                : theme.colorScheme.surface,
-                            width: turn ? 4 : 2,
-                          ),
-                          boxShadow: turn
-                              ? [
-                                  BoxShadow(
-                                    color: theme.colorScheme.secondary
-                                        .withValues(alpha: 0.4),
-                                    blurRadius: 15,
-                                    spreadRadius: 2,
+                      _buildPlayerCard(
+                        theme.colorScheme.surface,
+                        turn
+                            ? theme.colorScheme.secondary
+                            : theme.colorScheme.surface,
+                        turn ? 4 : 2,
+                        turn
+                            ? [
+                                BoxShadow(
+                                  color: theme.colorScheme.secondary.withValues(
+                                    alpha: 0.4,
                                   ),
-                                ]
-                              : [],
-                        ),
-                        child: Column(
-                          children: [
-                            Text(
-                              "O",
-                              style: TextStyle(
-                                color: theme.colorScheme.secondary,
-                              ),
-                            ),
-                            Text(
-                              "Player O",
-                              style: TextStyle(
-                                color: theme.colorScheme.secondary,
-                              ),
-                            ),
-                          ],
-                        ),
+                                  blurRadius: 15,
+                                  spreadRadius: 2,
+                                ),
+                              ]
+                            : [],
+                        "O",
+                        theme.colorScheme.secondary,
+                        "Player O",
+                        theme.colorScheme.secondary,
                       ),
                     ],
                   ),
 
                   Stack(
+                    alignment: .center,
                     children: [
                       Container(
-                        width: 400,
+                        width: 410,
                         height: 400,
                         decoration: BoxDecoration(
-                          color: Colors.transparent,
+                          color: theme.colorScheme.surface,
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
                       GridView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: 9,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          crossAxisSpacing: 4,
-                          mainAxisSpacing: 4,
-                          childAspectRatio: 1,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: 9,
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 4,
+                            mainAxisSpacing: 4,
+                            childAspectRatio: 1,
+                          ),
+                          itemBuilder: (BuildContext context, int index) {
+                            final isWin = winLocation.contains(index);
+                            return GestureDetector(
+                              onTap: () {
+                                _tapped(index);
+                              },
+                              child:
+                                  Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: isWin
+                                                ? AppTheme.winColor
+                                                : theme.colorScheme.surface,
+                                            width: isWin ? 4 : 3,
+                                          ),
+                                          borderRadius: BorderRadius.circular(20),
+                                          color: theme.colorScheme.surface,
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            xo[index],
+                                            style: TextStyle(
+                                              fontSize: 60,
+                                              fontWeight: FontWeight.bold,
+                                              color: isWin
+                                                  ? AppTheme.winColor
+                                                  : (xo[index] == 'X'
+                                                        ? theme
+                                                              .colorScheme
+                                                              .primary
+                                                        : theme
+                                                              .colorScheme
+                                                              .secondary),
+                                              shadows: [
+                                                Shadow(
+                                                  blurRadius: 10,
+                                                  color:
+                                                      (xo[index] == 'X'
+                                                              ? theme
+                                                                    .colorScheme
+                                                                    .primary
+                                                              : theme
+                                                                    .colorScheme
+                                                                    .secondary)
+                                                          .withValues(alpha: 0.5),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                      .animate(key: ValueKey(xo[index]))
+                                      .flip(
+                                        direction: Axis.horizontal,
+                                        duration: 400.ms,
+                                        curve: Curves.easeInOut,
+                                      )
+                                      .fadeIn(),
+                            );
+                          },
                         ),
-                        itemBuilder: (BuildContext context, int index) {
-                          final isWin = winLocation.contains(index);
-                          return GestureDetector(
-                            onTap: () {
-                              _tapped(index);
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: isWin
-                                      ? AppTheme.winColor
-                                      : theme.colorScheme.surface,
-                                  width: isWin ? 4 : 3,
-                                ),
-                                borderRadius: BorderRadius.circular(20),
-                                color: theme.colorScheme.surface,
-                              ),
-                              child: Center(
-                                child: Text(
-                                  xo[index],
-                                  style: TextStyle(
-                                    fontSize: 60,
-                                    fontWeight: FontWeight.bold,
-                                    color: isWin
-                                        ? AppTheme.winColor
-                                        : (xo[index] == 'X'
-                                              ? theme.colorScheme.primary
-                                              : theme.colorScheme.secondary),
-                                    shadows: [
-                                      Shadow(
-                                        blurRadius: 10,
-                                        color:
-                                            (xo[index] == 'X'
-                                                    ? theme.colorScheme.primary
-                                                    : theme
-                                                          .colorScheme
-                                                          .secondary)
-                                                .withValues(alpha: 0.5),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
+                      
                     ],
                   ),
                 ],
@@ -515,4 +430,65 @@ class _GameScreenState extends State<GameScreen> {
       ),
     );
   }
+}
+
+Widget _buildIconButton(Function func, Widget icon, Color color) {
+  return Container(
+    width: 45,
+    height: 45,
+    decoration: BoxDecoration(
+      color: color,
+      border: Border.all(color: color, width: 2.5),
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: IconButton(
+      onPressed: () {
+        func();
+      },
+      icon: icon,
+    ),
+  );
+}
+
+Widget _buildScoresBoard(
+  String score,
+  String player,
+  Color scoreColor,
+  Color statusColor,
+) {
+  return Column(
+    children: [
+      Text(score, style: TextStyle(color: scoreColor)),
+      Text(player, style: TextStyle(color: statusColor)),
+    ],
+  );
+}
+
+Widget _buildPlayerCard(
+  Color containerColor,
+  Color borderColor,
+  double width,
+  List<BoxShadow> shadow,
+  String playerTurn,
+  Color turnColor,
+  String player,
+  Color playerColor,
+) {
+  return AnimatedContainer(
+    duration: const Duration(milliseconds: 300),
+    width: 160,
+    height: 110,
+    decoration: BoxDecoration(
+      color: containerColor,
+      borderRadius: BorderRadius.circular(12),
+      border: Border.all(color: borderColor, width: width),
+      boxShadow: shadow,
+    ),
+    child: Column(
+      children: [
+        Text(playerTurn, style: TextStyle(color: turnColor)),
+        Text(player, style: TextStyle(color: playerColor)),
+      ],
+    ),
+  );
 }

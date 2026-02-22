@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tic_tac_toe/theme/app_theme.dart';
+import 'package:lottie/lottie.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class GameScreen extends StatefulWidget {
   final bool isDarkMode;
@@ -99,14 +101,52 @@ class _GameScreenState extends State<GameScreen> {
   }
 
   void _showDialog(String winner) {
+    final player = AudioPlayer();
+  player.play(AssetSource('audio/win_sound.mp3'));
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            "WINNER $winner",
-            style: TextStyle(color: Colors.black12),
+        return Stack(
+          children: [
+            Lottie.asset('assets/animation/celebrate.json'),
+           AlertDialog(
+            title: Column(
+              children: [
+                Text(
+                  "CONGRATS!",
+                  style: TextStyle(color: Colors.grey[700], fontSize: 16, letterSpacing: 2),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  "Winner is: $winner",
+                  style: const TextStyle(
+                    color: Colors.amberAccent, 
+                    fontSize: 30, 
+                    fontWeight: FontWeight.bold
+                  ),
+                ),
+              ],
+            ),
+            actionsAlignment: .center,
+            actions: [
+              TextButton(onPressed: (){
+                player.stop();
+                _clearBoard();
+              Navigator.of(context).pop();
+              }, child: Text("Play Again", style: TextStyle(color: Colors.black),)),
+              
+            ],
+            backgroundColor: 
+            Colors.white,
+
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+
+
           ),
+          ]
         );
       },
     );

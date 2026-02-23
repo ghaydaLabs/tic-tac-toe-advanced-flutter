@@ -22,8 +22,18 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
-  bool turn = true;
-  List<String> xo = ['', '', '', '', '', '', '', '', ''];
+  bool turn = true; // true = Player O turn // false = Player X turn
+  List<String> xo = [
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+    '',
+  ]; // Represents the 3x3 board and each cell can be: 'X', 'O', or ''
   List<int> winLocation = [];
   List<int> moveHistory = [];
   int scoresOfO = 0;
@@ -32,7 +42,9 @@ class _GameScreenState extends State<GameScreen> {
 
   void _tapped(int index) {
     setState(() {
-      if (xo[index] == '' && winLocation.isEmpty) {
+      if (xo[index] == '' &&
+          winLocation.isEmpty) // Prevent playing in a filled cell
+      {
         if (turn && xo[index] == '') {
           xo[index] = 'O';
         } else if (!turn && xo[index] == '') {
@@ -45,9 +57,12 @@ class _GameScreenState extends State<GameScreen> {
     });
   }
 
+  // Function that removes the last move
   void _undoLastMove() {
     setState(() {
-      if (moveHistory.isNotEmpty && winLocation.isEmpty) {
+      if (moveHistory.isNotEmpty &&
+          winLocation.isEmpty) // Undo allowed only if game is still active
+      {
         int lastIndex = moveHistory.removeLast();
         xo[lastIndex] = '';
         turn = !turn;
@@ -55,8 +70,10 @@ class _GameScreenState extends State<GameScreen> {
     });
   }
 
+  // Function that checks all possible winning combinations
   void _winner() {
     bool isWinnerFound = false;
+    // Each condition checks a row, column, or diagonal
     if (xo[0] == xo[1] && xo[0] == xo[2] && xo[0] != '') {
       setState(() => winLocation = [0, 1, 2]);
       _showDialog(xo[0]);
@@ -68,7 +85,7 @@ class _GameScreenState extends State<GameScreen> {
       isWinnerFound = true;
     }
     if (xo[6] == xo[7] && xo[6] == xo[8] && xo[6] != '') {
-      setState(() => winLocation = [3, 4, 5]);
+      setState(() => winLocation = [6, 7, 8]);
       _showDialog(xo[6]);
       isWinnerFound = true;
     }
@@ -97,6 +114,7 @@ class _GameScreenState extends State<GameScreen> {
       _showDialog(xo[6]);
       isWinnerFound = true;
     }
+    // If no winner && board is full so it's a draw
     if (!isWinnerFound && !xo.contains('')) {
       setState(() {
         scoresOfDraw++;
@@ -104,39 +122,35 @@ class _GameScreenState extends State<GameScreen> {
     }
   }
 
+  // Function that displays the winner dialog and plays celebration sound
   void _showDialog(String winner) {
     final player = AudioPlayer();
     player.play(AssetSource('audio/win_sound.mp3'));
     showDialog(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible:
+          false, // Prevent closing by tapping outside the dialog
       builder: (BuildContext context) {
         return Stack(
           children: [
             Lottie.asset('assets/animation/celebrate.json'),
             AlertDialog(
-              title: Column(
-                children: [
-                  Text(
-                    "CONGRATS!",
-                    style: TextStyle(
-                      color: Colors.grey[700],
-                      fontSize: 16,
-                      letterSpacing: 2,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    "Winner is: $winner",
-                    style: const TextStyle(
-                      color: Colors.amberAccent,
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+              title: Text(
+                "CONGRATS!",
+                style: TextStyle(
+                  color: Colors.grey[700],
+                  fontSize: 16,
+                  letterSpacing: 2,
+                ),
               ),
-              actionsAlignment: .center,
+              content: Text(
+                "Winner is: $winner",
+                style: const TextStyle(
+                  color: Colors.amberAccent,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -151,7 +165,6 @@ class _GameScreenState extends State<GameScreen> {
                 ),
               ],
               backgroundColor: Colors.white,
-
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
@@ -160,6 +173,7 @@ class _GameScreenState extends State<GameScreen> {
         );
       },
     );
+    // Update score board based on winner (X, O, or Draw)
     if (winner == 'O') {
       scoresOfO++;
     } else if (winner == 'X') {
@@ -167,6 +181,7 @@ class _GameScreenState extends State<GameScreen> {
     }
   }
 
+  // Function that clear board
   void _clearBoard() {
     setState(() {
       for (int i = 0; i < 9; i++) {
@@ -180,9 +195,10 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final loc = AppLocalizations.of(context)!;
+    final theme = Theme.of(context); // Access theme data
+    final loc = AppLocalizations.of(context)!; // Access localized language
 
+    // container for gradient background
     return Container(
       decoration: BoxDecoration(
         gradient: widget.isDarkMode
@@ -220,7 +236,7 @@ class _GameScreenState extends State<GameScreen> {
             ),
 
             SizedBox(width: 5),
-            
+
             _buildIconButton(
               widget.onToggleLanguage,
               Icon(Icons.translate_outlined),
@@ -244,6 +260,7 @@ class _GameScreenState extends State<GameScreen> {
         body: SafeArea(
           child: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
+              // Get screen dimensions for responsive design
               double screenWidth = constraints.maxWidth;
               double screenHeight = constraints.maxHeight;
 
@@ -259,7 +276,7 @@ class _GameScreenState extends State<GameScreen> {
                       children: [
                         Container(
                           width: screenWidth,
-                          height: device ? screenHeight / 3 : screenHeight / 7,
+                          height: device ? screenHeight / 4 : screenHeight / 7,
                           decoration: BoxDecoration(
                             color: theme.colorScheme.surface,
                             borderRadius: BorderRadius.circular(12),
@@ -361,7 +378,9 @@ class _GameScreenState extends State<GameScreen> {
                                 childAspectRatio: device ? 3 : 1,
                               ),
                           itemBuilder: (BuildContext context, int index) {
-                            final isWin = winLocation.contains(index);
+                            final isWin = winLocation.contains(
+                              index,
+                            ); // Check if current cell is part of the winning pattern
                             return GestureDetector(
                               onTap: () {
                                 _tapped(index);
@@ -438,6 +457,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 }
 
+// Reusable widget for icon buttons
 Widget _buildIconButton(Function func, Widget icon, Color color) {
   return Container(
     width: 45,
@@ -456,6 +476,7 @@ Widget _buildIconButton(Function func, Widget icon, Color color) {
   );
 }
 
+// Reusable widget for score board
 Widget _buildScoresBoard(
   String score,
   String player,
@@ -481,6 +502,7 @@ Widget _buildScoresBoard(
   );
 }
 
+// Reusable widget for animated player card
 Widget _buildPlayerCard(
   Color containerColor,
   Color borderColor,
@@ -497,7 +519,7 @@ Widget _buildPlayerCard(
   return AnimatedContainer(
     duration: const Duration(milliseconds: 300),
     width: screenWidth / 2.2,
-    height: device ? screenHeight / 3 : screenHeight / 6,
+    height: device ? screenHeight / 4 : screenHeight / 6,
     decoration: BoxDecoration(
       color: containerColor,
       borderRadius: BorderRadius.circular(12),

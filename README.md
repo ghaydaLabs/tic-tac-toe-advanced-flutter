@@ -12,26 +12,26 @@ This project demonstrates practical Flutter development concepts including anima
 ---
 ## 🎥 Demo Video
 
-[![Watch the demo](assets/screenshots/demo_thumbnail.png)](https://drive.google.com/file/d/1X7AimsG2YJ7xUpQZ8wfFwr6Cla_h8HGi/view?usp=drivesdk)
+[![Watch the demo](tic_tac_toe/assets/screenshots/demo_thumbnail.png)](https://drive.google.com/file/d/1X7AimsG2YJ7xUpQZ8wfFwr6Cla_h8HGi/view?usp=drivesdk)
 
 ---
 
 ## 📸 Screenshots
 
 ### 🌙 Dark Mode
-![Dark Mode](assets/screenshots/dark_mode.png)
+![Dark Mode](tic_tac_toe/assets/screenshots/dark_mode.png)
 
 ### ☀️ Light Mode
-![Light Mode](assets/screenshots/light_mode.png)
+![Light Mode](tic_tac_toe/assets/screenshots/light_mode.png)
 
 ### 🏆 Win Celebration
-![Win State](assets/screenshots/win_state.png)
+![Win State](tic_tac_toe/assets/screenshots/win_state.png)
 
 ### 🌍 Arabic (RTL) Mode
-![RTL Mode](assets/screenshots/rtl_mode.png)
+![RTL Mode](tic_tac_toe/assets/screenshots/rtl_mode.png)
 
 ### 📱 iPad (Responsive Layout)
-![iPad Demo](assets/screenshots/ipad_demo.png)
+![iPad Demo](tic_tac_toe/assets/screenshots/ipad_demo.png)
 
 ---
 

@@ -1,49 +1,143 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/NwGMhDpQ)
-# 🎮 Tic Tac Toe - Advanced Flutter Edition
+# 🎮 Tic Tac Toe – Advanced Flutter Edition
 
-A sophisticated Tic Tac Toe application built with Flutter, focusing on high-quality UI/UX, seamless transitions, and interactive animations. This project demonstrates the implementation of complex game logic combined with a polished, responsive interface.
+![Flutter](https://img.shields.io/badge/Flutter-3.x-blue?logo=flutter)
+![Dart](https://img.shields.io/badge/Dart-3.x-blue?logo=dart)
+![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-green)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+
+A modern and interactive **Tic Tac Toe game built with Flutter**, showcasing advanced UI/UX, smooth animations, responsive design, localization (RTL/LTR), and clean project structure.
+
+This project demonstrates practical Flutter development concepts including animations, theming, localization, and reusable UI components.
+
+---
+## 🎥 Demo Video
+
+[![Watch the demo](assets/screenshots/demo_thumbnail.png)](https://drive.google.com/file/d/1X7AimsG2YJ7xUpQZ8wfFwr6Cla_h8HGi/view?usp=drivesdk)
 
 ---
 
-## 🚀 Key Features
+## 📸 Screenshots
 
-* **Smart Game Logic**: Full implementation of Tic Tac Toe rules, including win detection (horizontal, vertical, diagonal), draw handling, and score tracking for Player X and Player O.
-* **Dynamic Theming**: Integrated Light and Dark mode support that adapts the entire UI color palette, including gradients, glows, and shadows.
-* **Interactive Cards**: 
-    * **Tactile Feedback**: Player cards and game tiles feature interactive animations using `AnimatedContainer` and `Tween` to provide a "pop" effect on tap.
-    * **State Awareness**: Cards visually reflect the current turn and winner status through dynamic borders and scaling.
-* **Win Celebration**: A dedicated interactive animation triggers upon victory, highlighting the winning combination with a unique visual sequence to celebrate the player's achievement.
-* **Full Localization**: Support for English (LTR) and Arabic (RTL) layouts with automatic UI mirroring.
+### 🌙 Dark Mode
+![Dark Mode](assets/screenshots/dark_mode.png)
 
----
+### ☀️ Light Mode
+![Light Mode](assets/screenshots/light_mode.png)
 
-## 🛠 Technical Stack & Core Concepts
+### 🏆 Win Celebration
+![Win State](assets/screenshots/win_state.png)
 
-This project serves as a practical application of the following Flutter concepts:
+### 🌍 Arabic (RTL) Mode
+![RTL Mode](assets/screenshots/rtl_mode.png)
 
-### 1. Animations (The Heart of the UI) 
-* **Implicit Animations**.
-* **Explicit Animations**.
-* * **Thrid Party packages**:.
-
-
-### 2. UI/UX & Theming
-* **Responsive Layout**: Built to look great on various screen sizes using `LayoutBuilder`.
-* **Theming Engine**: Deep integration of `ThemeData` to switch between a vibrant Dark Mode and a clean Light Mode.
-
-### 3. State Management
-* Efficiently managing the game board state, turn switching, and real-time score updates.
+### 📱 iPad (Responsive Layout)
+![iPad Demo](assets/screenshots/ipad_demo.png)
 
 ---
 
-## 📸 Project Preview
+## ✨ Features
 
-| Feature | Preview |
-| :--- | :--- |
-| **Dark Mode & Win State** | |
-| **Light Mode ** |  |
-| **Interactive Card Clicked ** |  |
+### 🧠 Smart Game Logic
+- Win detection (horizontal, vertical, diagonal)
+- Draw detection
+- Score tracking (Player X, Player O, Draw)
+- Turn switching
+- Undo last move
 
 ---
 
+## 🎨 Dynamic Theming
 
+- Light Mode
+- Dark Mode
+- Custom gradients
+- Glows & shadows
+- Theme switching using ThemeData
+
+---
+
+## 🎞 Animations & Effects
+
+- Implicit animations using `AnimatedContainer`
+- Explicit board flip animation
+- Win celebration animation powered by [flutter_animate](https://pub.dev/packages/flutter_animate)
+- Lottie celebration animation using [lottie](https://pub.dev/packages/lottie)
+- Victory sound effect using [audioplayers](https://pub.dev/packages/audioplayers)
+
+---
+
+## 🌍 Localization (RTL / LTR Support)
+
+- English (LTR)
+- Arabic (RTL)
+- Automatic layout mirroring
+
+---
+
+## 📱 Responsive Layout
+
+- Small mobile screens
+- Large mobile screens
+- Adaptive UI using LayoutBuilder & flexible widgets
+
+---
+
+## 🛠 Tech Stack
+
+- **Flutter** – Cross-platform UI framework  
+- **Dart** – Programming language  
+- **State Management** – setState  
+- **Theming System** – Custom ThemeData (Light & Dark Mode)  
+- **Animations** – Implicit & Explicit animations  
+- **Third-Party Packages** – flutter_animate, lottie, audioplayers
+
+---
+
+## 📦 Packages Used
+
+- flutter_animate
+- lottie
+- audioplayers
+
+---
+
+# 🏗 Project Structure
+
+```text
+
+lib
+│
+├── controllers
+│
+├── models
+│
+├── views
+│   ├── screens
+│   └── widgets
+│
+├── theme
+│
+├── l10n
+│
+└── main.dart
+```
+
+---
+
+## 🚀 Getting Started
+1. Clone the repository
+2. Run:
+```
+flutter pub get
+flutter run
+```
+
+---
+
+## 👨‍💻 Author
+
+**Ghaida Khalid Albarqi**  
+
+- GitHub: https://github.com/ghaydaLabs
+- LinkedIn: https://linkedin.com/in/ghayda-khalid
+- Email: ghayda.dev@outlook.sa

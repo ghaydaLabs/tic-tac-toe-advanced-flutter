@@ -20,11 +20,6 @@ class AppTheme {
       surface: Colors.white.withValues(alpha: 0.2),
       onSurface: Colors.white,
     ),
-
-    textTheme: const TextTheme(
-      // Title - Tic Tac Toe
-      titleLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.w600),
-    ),
   );
 
   // =========================
@@ -44,11 +39,6 @@ class AppTheme {
       onError: Colors.white,
       surface: Color.fromARGB(255, 21, 27, 51).withValues(alpha: 0.4),
       onSurface: Colors.grey,
-    ),
-
-    textTheme: const TextTheme(
-      // Title - Tic Tac Toe
-      titleLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.w600),
     ),
   );
 }

@@ -1,7 +1,13 @@
 # 🎮 Tic Tac Toe – Advanced Flutter Edition
 
-A modern and interactive Tic Tac Toe game built with Flutter, focused on high-quality UI/UX, smooth animations, and clean architecture.
-This project demonstrates advanced Flutter concepts including animations, responsive design, localization (RTL/LTR), theming, and structured state management.
+![Flutter](https://img.shields.io/badge/Flutter-3.x-blue?logo=flutter)
+![Dart](https://img.shields.io/badge/Dart-3.x-blue?logo=dart)
+![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-green)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+
+A modern and interactive **Tic Tac Toe game built with Flutter**, showcasing advanced UI/UX, smooth animations, responsive design, localization (RTL/LTR), and clean project structure.
+
+This project demonstrates practical Flutter development concepts including animations, theming, localization, and reusable UI components.
 
 ---
 ## 🎥 Demo Video
@@ -76,13 +82,6 @@ This project demonstrates advanced Flutter concepts including animations, respon
 
 ---
 
-## 🧪 Testing
-
-- Game logic testing
-- UI behavior validation
-
----
-
 ## 🛠 Tech Stack
 
 - **Flutter** – Cross-platform UI framework  
@@ -94,13 +93,34 @@ This project demonstrates advanced Flutter concepts including animations, respon
 
 ---
 
-## 🏗 Architecture Highlights
+## 📦 Packages Used
 
-- Clean separation between UI and game logic  
-- Reusable custom widgets for repeated components  
-- Extracted shared UI elements for better maintainability  
-- Organized state handling for board, scores, and turns  
-- Structured, readable code with inline documentation  
+- flutter_animate
+- lottie
+- audioplayers
+
+---
+
+# 🏗 Project Structure
+
+```text
+
+lib
+│
+├── controllers
+│
+├── models
+│
+├── views
+│   ├── screens
+│   └── widgets
+│
+├── theme
+│
+├── l10n
+│
+└── main.dart
+```
 
 ---
 
@@ -111,3 +131,13 @@ This project demonstrates advanced Flutter concepts including animations, respon
 flutter pub get
 flutter run
 ```
+
+---
+
+## 👨‍💻 Author
+
+**Ghaida Khalid Albarqi**  
+
+- GitHub: https://github.com/ghaydaLabs
+- LinkedIn: https://linkedin.com/in/ghayda-khalid
+- Email: ghayda.dev@outlook.sa
